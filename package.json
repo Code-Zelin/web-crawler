@@ -1,0 +1,25 @@
+{
+  "name": "web-crawler",
+  "version": "1.0.0",
+  "description": "使用node.js实现网络爬虫",
+  "main": "crawler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Martin-ZL/web-crawler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Martin-ZL/web-crawler/issues"
+  },
+  "homepage": "https://github.com/Martin-ZL/web-crawler#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.4",
+    "superagent": "^4.0.0",
+    "superagent-charset": "^1.2.0"
+  }
+}
