@@ -55,18 +55,19 @@ function printInfo(info, course) {
 async function filterDetail(html, brand) {
     var $ = cheerio.load(html);
 
-    let details = [];
+    let details = '';
     var productlist = $('.productlist', '.mainbox');
 
     var page_num = $('#page_num', '.mainbox');
 
     productlist.find('.productlist-ul-li').each(function(index, element) {
         const item = $(element);
-        details.push({
+        const newItem = {
             name: item.find('.pul-title').attr('title'),
             image: 'http:' + item.find('img').attr('src'),
             brand,
-        })
+        };
+        details += JSON.stringify(newItem);
     })
 
     if (page_num.children().length > 0) {
@@ -76,7 +77,7 @@ async function filterDetail(html, brand) {
             let newDetails = await formatSuperagent(href, function(html) {
                 return filterDetail(html, brand);
             });
-            details = [...details, ...newDetails];
+            details += newDetails;
             return details;
         } else {
             return details;
@@ -92,9 +93,13 @@ function formatSuperagent(url, callback) {
         superagent.get(url)
             .charset('gbk')
             .end(function (err, sres) {
-                var html = sres.text;
-                data = callback(html);
-                return resolve(data);
+                if (sres) {
+                    var html = sres.text;
+                    data = callback(html);
+                    return resolve(data);
+                } else {
+                    return resolve('');
+                }
             });
     })
 }
@@ -122,7 +127,7 @@ app.get('/detail', function(req, res, next) {
                     var output =  filterDetail(html, inner_data.brand);
                     return output;
                 })
-                fs.writeFileSync(`./${inner_data.brand}.json`, JSON.stringify(endValue), {
+                fs.writeFileSync(`./data/${inner_data.brand}.json`, endValue, {
                     flag: 'a'
                 })
             })(detail);
